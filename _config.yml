@@ -1,0 +1,21 @@
+name: Kirk Wright
+
+description: The adventures of a prairie kid.
+
+author: Kirk Wright
+
+author_email: franklinkirkwright@gmail.com
+
+category_dir: /
+
+baseurl:
+
+url: http://www.franklinkirkwright.com
+
+markdown: rdiscount
+
+permalink: pretty
+
+paginate: 1
+
+exclude: 
