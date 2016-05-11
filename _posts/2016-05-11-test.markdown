@@ -1,9 +1,7 @@
+---
 layout: post
-
 title: test
-
 date: 2016-05-10 22:21:32 -0700
-
 categories: jekyll update
-
+---
 Let's see if this works!
