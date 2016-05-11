@@ -1,1 +1,0 @@
-# kirkwright.github.io
