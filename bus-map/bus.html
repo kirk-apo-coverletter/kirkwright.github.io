@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title></title>
+    <script src='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.css' rel='stylesheet' />
+	<script src="https://code.jquery.com/jquery-1.10.2.js"></script>
+	<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js'></script>
+    
+	<!-- custom css -->
+	<style>
+        body { margin:0; padding:0; }
+	header {
+    background-color: rgba(11, 202, 11, 0.8);
+    padding:0 10px;
+	padding-bottom: 10px;
+    color:#ffffff;
+    font-weight:300;
+    font-family:"Segoe UI Light","Segoe UI";
+    position:absolute;
+    z-index:10;
+    width:100%;
+    min-height:60px;
+    line-height:20px;
+    -webkit-box-sizing:border-box;
+       -moz-box-sizing:border-box;
+            box-sizing:border-box;
+    text-align: center;
+	}
+.map { position:absolute; top:0; bottom:0; width:100%; }
+.sidebar {position: fixed;
+left: 80%;
+top: 160px;
+width: 19%;
+font-family: "Segoe UI Light","Segoe UI";
+font-weight: 300;
+background-color: rgba(32, 117, 201, 0.7);
+text-align:center;
+color:white}
+p.info {
+margin: 0.25 0.25 0.25 0.25}
+
+<div id="container">
+  <div id="content">Content here</div>
+  <div id="navbar">Navigation</div>
+</div>
+  </style>
+</head>
+
+
+<body>
+<header>
+<h2>WELCOME | MyBus JACKSONVILLE</h2>
+This app is designed to provide users information about 1) the nearest bus stop based on the location you click 2) the next bus's location, 3) the time next bus will be arriving to the stop <br> and 4) whether you will be able to arrive at the stop on time. Click to indicate your location, and the closest bus stop will show up in blue with the next bus appearing in green. Enjoy! <br>Note: if bus does not load, please refresh the page once!<br>---
+</header>
+<div id='map-leaflet' class='map'></div>
+<div class="sidebar">
+	<h3>INFO ON YOUR TRIP:</h3>
+	<p id="youAreHere" class="info"></p>
+	<p id="busStop" class="info"></p>
+	<p id="bus" class="info"></p>
+	<p id="canMakeIt" class="info"></p>
+	<p class="info">Thanks for using MyBus JACKSONVILLE!</p>
+<div>
+
+<script>
+// Initialize the map.
+L.mapbox.accessToken = 'pk.eyJ1Ijoia2lya3dyaWdodCIsImEiOiJjajAxaDMyZGowNm04MnFxcnduY3ZqODBxIn0.cCRTGxFJGjH16-X8PQHwcw';
+var map = new L.mapbox.map('map-leaflet', 'mapbox.streets').setView([30.3322, -81.6557], 13);
+
+// Define all the gobal variables (I just did it like this so that it's more organized).
+var hasContributed = 0;
+var displayedStopLat;
+var displayedStopLng;
+var displayedStopName;
+var displayedBusLat;
+var displayedBusLng;
+var displayedBusID;
+var myPosition;
+var stopPos;
+var busPos;
+var youToStopDistance;
+var stopToBusDistance;
+var busSpeed = 7;
+var youSpeed = 1.5;
+var canMakeIt;
+
+// Set the initial message.
+document.getElementById("youAreHere").innerHTML = "Click to show where you are.";
+
+function measure(lat1, lon1, lat2, lon2){  // generally used geo measurement function
+    var R = 6378.137; // Radius of earth in KM
+    var dLat = lat2 * Math.PI / 180 - lat1 * Math.PI / 180;
+    var dLon = lon2 * Math.PI / 180 - lon1 * Math.PI / 180;
+    var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+    var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+    var d = R * c;
+    return d * 1000; // meters
+}
+
+var busIcon = L.icon({
+    iconUrl: 'bus.jpg',
+
+    iconSize:     [36, 36], // size of the icon
+    iconAnchor:   [18, 18], // point of the icon which will correspond to marker's location
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var youIcon = L.icon({
+    iconUrl: 'you2.png',
+
+    iconSize:     [36, 36], // size of the icon
+    iconAnchor:   [18, 25], // point of the icon which will correspond to marker's location
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+var stopIcon = L.icon({
+    iconUrl: 'busStop.png',
+
+    iconSize:     [36, 36], // size of the icon
+    iconAnchor:   [18, 18], // point of the icon which will correspond to marker's location
+    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
+});
+
+// Executes on the click (dropping pin).
+map.on('click', function(e) {
+
+// Set your position.
+	if (hasContributed == 0) {
+		myPosition = L.marker(e.latlng, {icon:youIcon, draggable:'true', zIndexOffset:"5"}).addTo(map);
+		document.getElementById("youAreHere").innerHTML = "Drag the marker if you move.";
+		hasContributed = 1;
+	
+	// Set the closest bus stop.
+	jQuery.get("https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20stop_name,%20stop_lat,%20stop_lon%20FROM%201fIq_g7V0gjTxzjWnc6pPW-3qZs1CoEScBxJxs4AM&key=AIzaSyCtvYW8zPJT5W3w_ULD7D-ENQ6BG23MTFo",
+	function(data) {
+	
+	var rows = data['rows'];
+	var nearestStopLat, nearestStopLng, nearestStopName;
+	var smallestDistance = 100;
+	
+	for (var i in rows) {
+	
+        var stopName = rows[i][0];
+        var stopLat = rows[i][1];
+        var stopLng = rows[i][2];
+		
+		
+		var curPos = myPosition.getLatLng();
+		var thisDistance = Math.abs(curPos.lng-stopLng) + Math.abs(curPos.lat-stopLat);
+		if (thisDistance < smallestDistance) {
+			smallestDistance = thisDistance;
+			nearestStopLat = stopLat;
+			nearestStopLng = stopLng;
+			nearestStopName = stopName;
+		}
+	};
+	
+	// Set the stop location.
+	stopPos = L.marker([nearestStopLat, nearestStopLng], {icon:stopIcon}).addTo(map);
+	displayedStopLat = nearestStopLat;
+	displayedStopLng = nearestStopLng;
+	displayedStopName = nearestStopName;
+	}); 
+	
+	// Set the nearest bus.
+	jQuery.get("http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=jtafla",
+	function(data) {
+		var nearestBusLat, nearestBusLng, nearestBusID;
+		var smallestBusDistance = 100;
+		
+		var x = data.getElementsByTagName('vehicle');
+		for (i = 0; i < x.length; i++) { 
+		if (x[i].getAttribute('lat') != null) {
+			var thisBusLat = x[i].getAttribute('lat');
+			var thisBusLng = x[i].getAttribute('lon');
+			var thisDist = Math.abs(displayedStopLat-thisBusLat) + Math.abs(displayedStopLng-thisBusLng);
+			if (thisDist < smallestBusDistance) {
+				nearestBusLat = thisBusLat;
+				nearestBusLng = thisBusLng;
+				nearestBusID = x[i].getAttribute('id');
+				smallestBusDistance = thisDist;
+			}
+		}
+		};
+		
+		// Here's the bus position.
+		busPos = L.marker([nearestBusLat, nearestBusLng], {icon:busIcon}).addTo(map);
+		displayedBusID = nearestBusID;
+		displayedBusLat = nearestBusLat;
+		displayedBusLng = nearestBusLng;
+	});
+	
+	youToStopDistance = measure(myPosition.getLatLng().lat, myPosition.getLatLng().lng, displayedStopLat, displayedStopLng);
+	stopToBusDistance = measure(displayedBusLat, displayedBusLng, displayedStopLat, displayedStopLng);
+	timeToArrival = stopToBusDistance/busSpeed;
+	if (youToStopDistance/youSpeed <= stopToBusDistance/busSpeed) {
+		canMakeIt = true;
+		document.getElementById("canMakeIt").innerHTML = "It comes in "+timeToArrival+" seconds, you can make it!";
+	} else {
+		canMakeIt = false;
+		document.getElementById("canMakeIt").innerHTML = "It comes in "+timeToArrival+" seconds. You can't make it by walking, so start running!";
+	}
+	
+	
+	document.getElementById("busStop").innerHTML = "The closest stop is "+displayedStopName;
+	document.getElementById("bus").innerHTML = "The next bus is the "+displayedBusID+".";
+	}
+});
+
+map.on('mouseup', function() {
+	if (hasContributed == 1) {
+	
+	// Set the closest bus stop.
+	jQuery.get("https://www.googleapis.com/fusiontables/v1/query?sql=SELECT%20stop_name,%20stop_lat,%20stop_lon%20FROM%201fIq_g7V0gjTxzjWnc6pPW-3qZs1CoEScBxJxs4AM&key=AIzaSyCtvYW8zPJT5W3w_ULD7D-ENQ6BG23MTFo",
+	function(data) {
+	
+	var rows = data['rows'];
+	var nearestStopLat, nearestStopLng, nearestStopName;
+	var smallestDistance = 100;
+	
+	for (var i in rows) {
+	
+        var stopName = rows[i][0];
+        var stopLat = rows[i][1];
+        var stopLng = rows[i][2];
+		
+		var curPos = myPosition.getLatLng();
+		var thisDistance = Math.abs(curPos.lng-stopLng) + Math.abs(curPos.lat-stopLat);
+		if (thisDistance < smallestDistance) {
+			smallestDistance = thisDistance;
+			nearestStopLat = stopLat;
+			nearestStopLng = stopLng;
+			nearestStopName = stopName;
+		}
+	};
+	var newStopPos = new L.LatLng(nearestStopLat, nearestStopLng);
+	stopPos.setLatLng(newStopPos);
+	displayedStopLat = nearestStopLat;
+	displayedStopLng = nearestStopLng;
+	displayedStopName = nearestStopName;
+	}); 
+	
+	// Set the nearest bus.
+	jQuery.get("http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=jtafla",
+	function(data) {
+		var nearestBusLat, nearestBusLng, nearestBusID;
+		var smallestBusDistance = 100;
+		
+		var x = data.getElementsByTagName('vehicle');
+		for (i = 0; i < x.length; i++) { 
+		if (!isNaN(x[i].getAttribute('lat'))) {
+			var thisBusLat = x[i].getAttribute('lat');
+			var thisBusLng = x[i].getAttribute('lon');
+			var thisDist = Math.abs(displayedStopLat-thisBusLat) + Math.abs(displayedStopLng-thisBusLng);
+			if (thisDist < smallestBusDistance) {
+				nearestBusLat = thisBusLat;
+				nearestBusLng = thisBusLng;
+				nearestBusID = x[i].getAttribute('id');
+				smallestBusDistance = thisDist;
+			}
+		}
+		};
+	var newBusPos = new L.LatLng(nearestBusLat, nearestBusLng);
+	busPos.setLatLng(newBusPos);
+	displayedBusLat = nearestBusLat;
+	displayedBusLng = nearestBusLng;
+	});
+	
+	youToStopDistance = measure(myPosition.getLatLng().lat, myPosition.getLatLng().lng, displayedStopLat, displayedStopLng);
+	stopToBusDistance = measure(displayedBusLat, displayedBusLng, displayedStopLat, displayedStopLng);
+	timeToArrival = stopToBusDistance/busSpeed;
+	if (youToStopDistance/youSpeed <= stopToBusDistance/busSpeed) {
+		canMakeIt = true;
+		document.getElementById("canMakeIt").innerHTML = "It comes in "+timeToArrival+" seconds, you can make it!";
+	} else {
+		canMakeIt = false;
+		document.getElementById("canMakeIt").innerHTML = "It comes in "+timeToArrival+" seconds. You can't make it by walking, so start running!";
+	}
+	document.getElementById("busStop").innerHTML = "The closest stop is "+displayedStopName;
+	document.getElementById("bus").innerHTML = "The next bus is the "+displayedBusID+".";
+	}
+});
+
+window.setInterval(function(){
+	if (hasContributed == 1) {
+	
+	if (displayedBusLat != null) {
+	// Set the nearest bus every 5 seconds.
+	jQuery.get("http://webservices.nextbus.com/service/publicXMLFeed?command=vehicleLocations&a=jtafla",
+	function(data) {
+		var nearestBusLat, nearestBusLng, nearestBusID;
+		var smallestBusDistance = 100;
+		
+		var x = data.getElementsByTagName('vehicle');
+		for (i = 0; i < x.length; i++) { 
+		if (!isNaN(x[i].getAttribute('lat'))) {
+			var thisBusLat = x[i].getAttribute('lat');
+			var thisBusLng = x[i].getAttribute('lon');
+			var thisDist = Math.abs(displayedStopLat-thisBusLat) + Math.abs(displayedStopLng-thisBusLng);
+			if (thisDist < smallestBusDistance) {
+				nearestBusLat = thisBusLat;
+				nearestBusLng = thisBusLng;
+				nearestBusID = x[i].getAttribute('id');
+				smallestBusDistance = thisDist;
+			}
+		}
+		};
+	var newBusPos = new L.LatLng(nearestBusLat, nearestBusLng);
+	busPos.setLatLng(newBusPos);
+	displayedBusID = nearestBusID;
+	displayedBusLat = nearestBusLat;
+	displayedBusLng = nearestBusLng;
+
+
+	});
+	youToStopDistance = measure(myPosition.getLatLng().lat, myPosition.getLatLng().lng, displayedStopLat, displayedStopLng);
+	stopToBusDistance = measure(displayedBusLat, displayedBusLng, displayedStopLat, displayedStopLng);
+	timeToArrival = stopToBusDistance/busSpeed;
+	if (youToStopDistance/youSpeed <= stopToBusDistance/busSpeed) {
+		canMakeIt = true;
+		document.getElementById("canMakeIt").innerHTML = "It comes in "+timeToArrival+" seconds, you can make it!";
+	} else {
+		canMakeIt = false;
+		document.getElementById("canMakeIt").innerHTML = "It comes in "+timeToArrival+" seconds. You can't make it by walking, so start running!";
+	}
+	document.getElementById("busStop").innerHTML = "The closest stop is "+displayedStopName;
+	document.getElementById("bus").innerHTML = "The next bus is the "+displayedBusID+".";
+	}
+	}
+}, 1000);
+	
+</script>
+
+
+</body>
+</html>

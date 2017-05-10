@@ -1,28 +1,92 @@
----
-layout: landing-page
----		
-		<!-- Main -->
-			<article id="main">
+<html>
 
-				<header class="special container">
-					<span class="icon fa-laptop"></span>
-					<h2>Welcome to my website!</h2>
-					<p>Here you will find both information about me and what I have been working on. Perhaps most importantly,
-					<br />
-					a link to my blog can be found in the top right corner of this page. While it is very much a work in progress,
-					<br />
-					feel free to look around the site and don't hesitate to contact me if you have any questions.</p>
-				</header>
-			</article>
+<head>
+	<title>Kirk Wright</title>
+	<link rel="stylesheet" type="text/css" href="styles.css"/>
+	<script src='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.css' rel='stylesheet' />
+    <script src="https://unpkg.com/leaflet-responsive-popup@0.2.0/leaflet.responsive.popup.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-responsive-popup@0.2.0/leaflet.responsive.popup.css" />
+</head>
 
-		<!-- CTA -->
-			<section id="cta">
-			
-				<header>
-					<h2>Want to get in touch?</h2>
-					<p>Send me an email at franklinkirkwright@gmail.com.</p>
-				</header>
-				<footer>
-				</footer>
-			
-			</section>
+<body>
+
+	<div class="bar">
+		<div class="logo" display="inline">
+			<h1><a href="index.html">Kirk Wright</a></h1>
+			<hr>
+		</div>
+		<div class="menu">
+			<ul class="menu-bar">
+				<li class="menu-item"><h3><a href="about-me.html">About Me</a></h3></li>
+				<hr>
+				<li class="menu-item"><h3><a href="projects.html">Projects</a></h3></li>
+				<hr>
+				<li class="menu-item"><h3><a href="blog.html">Blog</a></h3></li>
+				<hr>
+				<li class="menu-item"><h3><a href="contact.html">Contact</a></h3></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="legend">
+		<h3 font-color="white">Interact with the map by clicking a red X.</h3>
+	</div>
+
+	<div id='map-leaflet' class='map'></div>
+
+	<script>
+		L.mapbox.accessToken = 'pk.eyJ1Ijoia2lya3dyaWdodCIsImEiOiJjajAxaDMyZGowNm04MnFxcnduY3ZqODBxIn0.cCRTGxFJGjH16-X8PQHwcw';
+		var map = new L.mapbox.map('map-leaflet', 'mapbox.pirates').setView([35, -87], 4);
+
+		var x1 = L.icon({
+    	iconUrl: 'icon.png',
+
+    	iconSize:     [36, 36], // size of the icon
+    	iconAnchor:   [14, 23], // point of the icon which will correspond to marker's location
+		});
+
+		var x2 = L.icon({
+    	iconUrl: 'icon.png',
+
+    	iconSize:     [36, 36], // size of the icon
+    	iconAnchor:   [14, 23], // point of the icon which will correspond to marker's location
+		});
+
+		var x3 = L.icon({
+    	iconUrl: 'icon.png',
+
+    	iconSize:     [36, 36], // size of the icon
+    	iconAnchor:   [14, 23], // point of the icon which will correspond to marker's location
+		});
+
+		var x4 = L.icon({
+    	iconUrl: 'icon.png',
+
+    	iconSize:     [36, 36], // size of the icon
+    	iconAnchor:   [14, 23], // point of the icon which will correspond to marker's location
+		});
+
+		var Winnipeg = L.marker([49.8951, -97.1384], {icon:x1}).addTo(map);
+		var Montreal = L.marker([45.5017, -73.5673], {icon:x2}).addTo(map);
+		var Toronto = L.marker([43.6532, -79.3832], {icon:x3}).addTo(map);
+		var SanSalvador = L.marker([13.6929, -89.2182], {icon:x4}).addTo(map);
+
+		var popup1 = L.responsivePopup({ hasTip: false }).setContent("<h2>Winnipeg</h2><hr><img class='popup-img' src='peg.jpg'><p>I am originally from Winnipeg, and worked at the International Institute for Sustainable Development on their community indicator system, <a href='http://www.mypeg.ca/'>Peg</a> in 2015.</p>");
+		var popup2 = L.responsivePopup({ hasTip: false }).setContent("<h2>Montreal</h2><hr><br><img class='popup-img' src='mcgill.png'><p><br>I study in the Honours Economics program at McGill University with minors in Computer Science and International Development Studies.</p>");
+		var popup3 = L.responsivePopup({ hasTip: false }).setContent("<h2>Toronto</h2><hr><br><img class='popup-img' src='scotiabank.jpg'><p><br>I currently work at Scotiabank in the Academic Partnerships department.</p>");
+		var popup4 = L.responsivePopup({ hasTip: false }).setContent("<h2>El Salvador</h2><hr><img class='popup-img' src='mareas-de-tasajera.jpg'><p>I spent the summer of 2016 working in El Salvador on <a href='http://www.mareasdetasajera.com/'>Mareas de Tasajera</a>.</p>");
+
+		Winnipeg.bindPopup(popup1);
+		Montreal.bindPopup(popup2);
+		Toronto.bindPopup(popup3);
+		SanSalvador.bindPopup(popup4);
+
+	</script>
+
+
+</body>
+
+</html>
+
+<!-- sk.eyJ1Ijoia2lya3dyaWdodCIsImEiOiJjajJleDNrdGwwNjlyMzNzNjgzeWJsbnE0In0.VyoiKDmyo68MY5TdKDU_sA -->

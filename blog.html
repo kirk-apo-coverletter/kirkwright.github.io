@@ -1,25 +1,44 @@
----
-layout: default
----
+<html>
 
-<article id="main">
-    <header class="special container">
-        <span class="icon fa-mobile"></span>
-        <h2>My <strong>Blog</strong></h2>
-        <p>I am currently in Tasajera, El Salvador!</p>
-    </header>
-    <section class="wrapper style4 container">
-        <ul class="posts">
-          {% for post in site.posts %}
-            <li class="wrapper {% if forloop.first %} style2 {% else %} style1 {% endif %}">
-              <h2><a href="{{ post.url }}">{{ post.title }}</a></h2>
-                {{ post.excerpt }}
-                <section class="special">
-                    <ul class="buttons">
-                        <li><a href="{{ post.url }}" class="button">Read more</a></li>
-                    </ul></section>
-            </li>
-          {% endfor %}
-        </ul>
-    </section>
-</article>
+<head>
+	<title>Kirk Wright - Blog</title>
+	<link rel="stylesheet" type="text/css" href="styles.css"/>
+	<script src='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.css' rel='stylesheet' />
+    <script src="https://unpkg.com/leaflet-responsive-popup@0.2.0/leaflet.responsive.popup.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-responsive-popup@0.2.0/leaflet.responsive.popup.css" />
+</head>
+
+<body>
+
+	<div class="bar">
+		<div class="logo" display="inline">
+			<h1><a href="index.html">Kirk Wright</a></h1>
+			<hr>
+		</div>
+		<div class="menu">
+			<ul class="menu-bar">
+				<li class="menu-item"><h3><a href="about-me.html">About Me</a></h3></li>
+				<hr>
+				<li class="menu-item"><h3><a href="projects.html">Projects</a></h3></li>
+				<hr>
+				<li class="menu-item-selected"><h3><a href="blog.html">Blog</a></h3></li>
+				<hr>
+				<li class="menu-item"><h3><a href="contact.html">Contact</a></h3></li>
+			</ul>
+		</div>
+	</div>
+
+	<div class="content-box">
+		<div class="content" align="middle">
+
+			<div class="writing-content">
+				<h1>Content coming soon</h1>
+			</div>
+
+		</div>
+	</div>
+
+</body>
+
+</html>
