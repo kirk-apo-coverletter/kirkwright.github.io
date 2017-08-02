@@ -1,0 +1,143 @@
+<html>
+
+<head>
+	<title>Kirk Wright</title>
+	<link rel="icon" type="image/png" href="favicon.ico.png">
+	<link rel="stylesheet" type="text/css" href="styles.css"/>
+	<script src='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.js'></script>
+    <link href='https://api.mapbox.com/mapbox.js/v3.0.1/mapbox.css' rel='stylesheet' />
+    <script src="https://unpkg.com/leaflet-responsive-popup@0.2.0/leaflet.responsive.popup.js"></script>
+	<link rel="stylesheet" href="https://unpkg.com/leaflet-responsive-popup@0.2.0/leaflet.responsive.popup.css" />
+</head>
+
+<body>
+
+	<div class="bar">
+		<a href="#show-map"><img src="circle2.png" class="bar-headshot"></a>
+		<img src="name.png" class="bar-name">
+
+
+		<div class="menu">
+			<div class="menu-item">
+				<a href="#about-me"><img src="about-me.png" class="bar-icon"></a>
+				<h3 style="margin-left: -25px;">About Me</h3>
+			</div>
+			<div class="menu-item">
+				<a href="#projects"><img src="projects.png" class="bar-icon"></a>
+				<h3 style="margin-left: -15px;">Projects</h3>
+			</div>
+			<!-- <div class="menu-item">
+				<a href="#blog"><img src="blog.png" class="bar-icon"></a>
+				<h3 style="margin-left: 10px;">Blog</h3>
+			</div> -->
+			<div class="menu-item">
+				<a href="#contact"><img src="contact.png" class="bar-icon"></a>
+				<h3 style="margin-left: -10px;">Contact</h3>
+			</div>
+		</div>
+	</div>
+
+	<span id="show-map" class="target"></span>
+	<div id='map-leaflet' class='map'></div>
+
+	<span id="about-me" class="target"></span>
+	<div class="page">
+		<div class="exit"><a href="#show-map"><img src="x.png" class="x"></a></div>
+		<div class="title">
+			<h2>About Me</h2>
+		</div>
+		<img src="headshot2.jpg" style="width: 25%; margin: 0 15px 0 0; float: left;">
+		<p>I am a fourth-year Ralph M. Barford Loran Scholar at McGill University in the Honours Economics program with minors in Computer Science and International Development Studies. Through my education and employment, I aim to bridge the gap between technology and people in both the private sector and the not-for-profit space.</p>
+		<p>In the summer of 2015, I worked at the International Institute for Sustainable Development on a community indicator system called Peg. We worked to leverage economic, environmental and social data to democratize access to information and create a more informed populace.</p>
+		<p>The following summer I travelled to El Salvador and co-founded Mareas de Tasajera, a streamlined community indicator system that brings the framework to low-income rural communities.</p>
+		<p>This summer I am working at Scotiabank in Toronto managing Academic Partnerships, facilitating transfer of knowledge between the bank and our 55+ partner institutions.</p>
+		<p>Originally from Winnipeg, I was selected as a Loran Scholar in 2014 and moved to Montreal where I continue to study at McGill.</p>
+	</div>
+
+		<span id="contact" class="target"></span>
+	<div class="page">
+		<div class="exit"><a href="#show-map"><img src="x.png" class="x"></a></div>
+		<div class="title">
+			<h2>Contact</h2>
+			<h1><br><br>Personal email: <a href="mailto:franklinkirkwright@gmail.com">franklinkirkwright@gmail.com</a></h1>
+			<h1>Mobile phone: (514) 691-4109</h1>
+			<h1>LinkedIn: <a href="https://www.linkedin.com/in/kirk-wright-901aa8a1/">Kirk Wright</a></h1>
+
+		</div>
+	</div>
+
+	<span id="projects" class="target"></span>
+	<div class="page">
+		<div class="exit"><a href="#show-map"><img src="x.png" class="x"></a></div>
+		<div class="title">
+			<h2>Projects</h2>
+		</div>
+		<div class="row">
+			<a href="http://www.franklinkirkwright.com/bus-map/bus.html"><img src="bus-app.png" style="width: 20%; float: left; padding-left: 5%; padding-right: 5%; margin-right: 15px;"></a>
+			<h1>Jacksonville MyBus</h1>
+			<p>This project was developed for a class at McGill. It accesses the live bus locations in Jacksonville, Florida every 5 seconds to tell you whether or not you can make the next bus at your nearest stop. I'll likely make it a bit more useful by adding a destination feature, but the current edition was still a fun exercise.</p>
+		</div><hr>
+		<div class="row">
+			<a href="http://www.mareasdetasajera.com/"><img src="mdt.png" style="width: 30%;  float: left; margin-right: 15px;">
+			<h1>Mareas de Tasajera</h1>
+			<p>I spent the summer of 2016 in El Salvador co-founding Mareas de Tasajera, a community indicator system serving a small fishing community called Isla Tasajera. The goal of the project was to establish a system tailored to the needs of low-income rural communities while minimizing costs. We also aimed to produce a replicable model for others to utilize.</p>
+		</div><hr>
+		<div class="row">
+			<a href="http://www.franklinkirkwright.com/study-space-map/study-map.html"><img src="study.png" style="width: 20%; float: left; padding-left: 5%; padding-right: 5%; margin-right: 15px;">
+			<h1>Montreal Study Space Search</h1>
+			<p>Another project from school, this tool crowdsources data and reviews from students regarding their favourite (or least favourite) places to study around Montreal. It then live maps the data with the icons organized by rating. Unfortunately the Fusion Tables functionality is becoming obsolete, so I imagine the mapping will not function properly for much longer.</p>
+		</div><hr>
+		<div class="row">
+			<a href="http://www.mypeg.ca/"><img src="peg.png" style="width: 30%; float: left; margin-right: 15px;">
+			<h1>Peg</h1>
+			<p>My summer at the International Institute for Sustainable Development was spent primarily working on Peg, an award-winning community indicator system serving Winnipeg. Through this experience I was confronted with my lack of data literacy, and it led me to pursue an education more focused on statistics and computer science. It was also this project that sparked my interest for geospatial data.</p>
+		</div>
+	</div>
+
+
+
+
+
+
+	<!-- <span id="blog" class="target"></span>
+	<div class="page">
+		<div class="exit"><a href="#show-map"><img src="x.png" class="x"></a></div>
+		<div class="title">
+			<h2>Blog</h2>
+		</div>
+	</div> -->
+
+	<script>
+		L.mapbox.accessToken = 'pk.eyJ1Ijoia2lya3dyaWdodCIsImEiOiJjajAxaDMyZGowNm04MnFxcnduY3ZqODBxIn0.cCRTGxFJGjH16-X8PQHwcw';
+		var map = new L.mapbox.map('map-leaflet', 'mapbox.light').setView([35, -90], 3);
+
+		var x1 = L.icon({
+    	iconUrl: 'icon2.png',
+
+    	iconSize:     [60, 36], // size of the icon
+    	iconAnchor:   [30, 36], // point of the icon which will correspond to marker's location
+		});
+
+		var Winnipeg = L.marker([49.8951, -97.1384], {icon:x1}).addTo(map);
+		var Montreal = L.marker([45.5017, -73.5673], {icon:x1}).addTo(map);
+		var Toronto = L.marker([43.6532, -79.3832], {icon:x1}).addTo(map);
+		var SanSalvador = L.marker([13.6929, -89.2182], {icon:x1}).addTo(map);
+
+		var popup1 = L.responsivePopup({ hasTip: false }).setContent("<div class='popup-box'><h2 style='font-size: 32px;'><br>Winnipeg</h2><hr><img class='popup-img' src='peg.jpg'><p>I am originally from Winnipeg. I also worked for the International Institute for Sustainable Development there on their community indicator system, <a href='http://www.mypeg.ca/'>Peg</a> in 2015. At IISD I:<br>• Championed a 360º historical review of the “Peg” community indicators project, allowing decision makers to better respond to users’ priorities<br>• Conducted research surrounding best practices in community data tracking, solidifying the Institute’s reputation as a leader in community indicators</p></div>");
+		var popup2 = L.responsivePopup({ hasTip: false }).setContent("<div class='popup-box'><h2 style='font-size: 32px;'><br>Montreal</h2><hr><br><img class='popup-img' src='mcgill.png'><div class='popup-text'><p>I study at McGill University as a <a href='http://www.loranscholar.ca/'>Ralph M. Barford Loran Scholar</a>. I am going into my final year in the Honours Economics program with minors in Computer Science and International Development Studies.</p></div></div>");
+		var popup3 = L.responsivePopup({ hasTip: false }).setContent("<div class='popup-box'><h2 style='font-size: 32px;'><br>Toronto</h2><hr><br><img class='popup-img' src='scotiabank.jpg'><div class='popup-text'><p>I currently work at Scotiabank in the Academic Partnerships department. In this role, I:<br>• Developed a robust tiering model to strategically restructure Scotiabank’s university partnerships;<br>• Contributed to the articulation of a bank-wide coordinated research strategy;<br>• Managed day-to-day relations with over 50 academic partner institutions across Canada;<br>• Deepened relationships with key partners, encouraging the introduction of innovative solutions to Scotiabank’s internal processes in addition to customer-facing products.</p><div></div>");
+		var popup4 = L.responsivePopup({ hasTip: false}).setContent("<div class='popup-box'><h2 style='font-size: 32px;'><br>El Salvador</h2><hr><img class='popup-img' src='mareas-de-tasajera.jpg'><div class='popup-text'><p>I spent the summer of 2016 working in El Salvador on <a href='http://www.mareasdetasajera.com/'>Mareas de Tasajera</a> where I:<br>• Co-founded and implemented a low-cost, highly replicable model for indicator systems that aggregates relevant community data and renders it accessible and understandable;<br>• Taught English and computer class to over 30 Tasajerans, improving language and data literacy;<br>• Democratized access to community data for the island’s 1,845 inhabitants, allowing residents to act optimally towards community development and lobby government more effectively.</p><div></div>");
+
+		Winnipeg.bindPopup(popup1, { maxWidth: 500});
+		Montreal.bindPopup(popup2, { maxWidth: 500});
+		Toronto.bindPopup(popup3, { maxWidth: 500});
+		SanSalvador.bindPopup(popup4, { maxWidth: 500});
+
+	</script>
+
+
+</body>
+
+</html>
+
+<!-- sk.eyJ1Ijoia2lya3dyaWdodCIsImEiOiJjajJleDNrdGwwNjlyMzNzNjgzeWJsbnE0In0.VyoiKDmyo68MY5TdKDU_sA -->
